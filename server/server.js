@@ -21,6 +21,16 @@ app.use(express.static(publicPath));
 io.on('connection',(socket)=>{//thr socket argument stands for the single user connection that was just fired as an event
     //the connection argument specifies that io is listening for a connection
     console.log('New user connected..');
+    //new message event
+    socket.emit('newMessage',{
+        from:'kola@example.com',
+        text:'Hi this is Kola',
+        createdAt:123
+    });
+    //listen for messages from the client
+    socket.on('createMessage',(message)=>{
+        console.log('message',message);
+    });
     //listen out for when the client disconnects using the socket argument and on function
     socket.on('disconnect',()=>{
         console.log('User disconnected..');

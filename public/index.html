@@ -11,17 +11,6 @@
    
    <!--using socket io in our server gives us access to this file. Containing a range of required functions-->
    <script src="/socket.io/socket.io.js"></script>
-   <script>
-       //create object of io method, which we have access to via the above sourced js file
-       var socket = io();//will handle opening up connections and keeping it open
-       //we can use the socket variable to listen for a connected event
-       socket.on('connect',()=>{
-        console.log('Connected to server..');
-       });
-       //likewise we can log a message when a connection drops
-       socket.on('disconnect',()=>{
-           console.log('Disconnected from server..');
-       })
-   </script>
+   <script src="/js/index.js"></script>
 </body>
 </html>
