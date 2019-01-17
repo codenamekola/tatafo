@@ -8,7 +8,7 @@ socket.on('connect', function () {
         console.log('message', message);
         //use jquery to render incoming messages
         //crated required html tag using jquery
-        var li = jQuery('<li></li>');
+        var li = jQuery('<li class="list-group-item bg-dark text-white"></li>');
         //give data to the created html tag
         li.text(`${message.from}: ${message.text}`);
         //append the created tag to an existing frontend element
@@ -28,6 +28,32 @@ socket.on('connect', function () {
             console.log('Getting reply from server..: ', serverResponse);
         });
     });
+
+    //code for getting user location
+    var locationButton = jQuery('#send-location');
+    locationButton.on('click',function(){
+    //check if users browser has geolocation enabled
+        if(!navigator.geolocation){
+            return alert('Sorry your browser doesnt support this feature');
+        }
+        //if geolocation is working,get user position.
+        //add one callback for success case and one for error case
+        navigator.geolocation.getCurrentPosition(function(position){
+            console.log(position);
+            //emit a new message to the server with the coordinates
+            socket.emit('createLocationMessage',{
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+                //add callback for server response
+            }, function (serverResponse) {
+                console.log('Getting reply from server..: ', serverResponse);
+            });
+        },function(){
+            //give error message if location not retrieved
+            alert('Unable to fetch your location :(');
+        });
+    });
+
     //sample emitted message
     /*socket.emit('createMessage', {
         from:'Kola',

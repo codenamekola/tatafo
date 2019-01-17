@@ -46,6 +46,12 @@ io.on('connection',(socket)=>{//the socket argument stands for the single user c
             createdAt: new Date().getTime()//get a time stamp
         });*/
     });
+    //listen out for when a client beams their location
+    socket.on('createLocationMessage',(coords,callback)=>{
+        io.emit('newMessage',generateMessage('Admin',`${coords.latitude}, ${coords.longitude}`));
+        //send acknowledgement for the client
+        callback('User location..received');
+    });
     //listen out for when the client disconnects using the socket argument and on function
     socket.on('disconnect',()=>{
         console.log('User disconnected..');
