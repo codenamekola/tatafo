@@ -7,6 +7,8 @@ const socketIO = require('socket.io');
 const http = require('http');
 //configure a public path
 const publicPath = path.join(__dirname,'../public');
+//bring in function for creating messages
+const {generateMessage} = require('./utils/message');
 //configuration for heroku
 const port = process.env.PORT || 3000;
 
@@ -18,18 +20,31 @@ var io = socketIO(server);//io would now serve as a socket server object
 //use the express static middleware to point to the public path
 app.use(express.static(publicPath));
 //use io to listen out for new socket connections
-io.on('connection',(socket)=>{//thr socket argument stands for the single user connection that was just fired as an event
+io.on('connection',(socket)=>{//the socket argument stands for the single user connection that was just fired as an event
     //the connection argument specifies that io is listening for a connection
+    //io.on will listen for connectino from all potential users
+    //socket.on listens for an event from one particular socket
     console.log('New user connected..');
-    //new message event
-    socket.emit('newMessage',{
-        from:'kola@example.com',
-        text:'Hi this is Kola',
-        createdAt:123
-    });
-    //listen for messages from the client
-    socket.on('createMessage',(message)=>{
+    //send a welcome message event to new user
+    socket.emit('newMessage',generateMessage('Admin','Welcome to TataFo!'));
+    //inform other connected users of a new user just joining
+    socket.broadcast.emit('newMessage',generateMessage('Admin','New User joined..'));
+    //listen for messages from a client
+    socket.on('createMessage',(message,callback)=>{
+        //the callback argument represents a function that can be called 
+        //as a way of the server giving an acknowloedgment back to the client
         console.log('message',message);
+        //emit the message to other connected users
+        //io.emit will broadcast to all connected users
+        //socket.emit broadcasts to just one socket connection
+        io.emit('newMessage',generateMessage(message.from,message.text));
+        callback('Received by server..');//callback is called an a string is passed as argument
+        //emit a broadcast message to everyone else but the sender
+        /*socket.broadcast.emit('newMessage',{
+            from: message.from,
+            text: message.text,
+            createdAt: new Date().getTime()//get a time stamp
+        });*/
     });
     //listen out for when the client disconnects using the socket argument and on function
     socket.on('disconnect',()=>{
