@@ -1,3 +1,4 @@
+var moment = require('moment');
 //create object of io method, which we have access to via the socket.io.js file
 var socket = io();//will handle opening up connections and keeping it open
 //we can use the socket variable to listen for a connected event
@@ -6,11 +7,13 @@ socket.on('connect', function () {
     //listen for new messages from server
     socket.on('newMessage', function (message) {
         console.log('message', message);
+        //format the time that comes in with the message
+        var formattedTime = moment(message.createdAt).format('h:mm a');
         //use jquery to render incoming messages
         //crated required html tag using jquery
         var li = jQuery('<li class="list-group-item bg-dark text-white"></li>');
         //give data to the created html tag
-        li.text(`${message.from}: ${message.text}`);
+        li.text(`${message.from} ${formattedTime}: ${message.text}`);
         //append the created tag to an existing frontend element
         jQuery('#messages').append(li);
     });
@@ -21,7 +24,8 @@ socket.on('connect', function () {
         //create element for the user location link
         var a = jQuery('<a target="_blank">New sent location</a>');
         //inject message into the list item
-        li.text(`${message.from}: `);
+        var formattedTime = moment(message.createdAt).format('h:mm a');
+        li.text(`${message.from} ${formattedTime}: `);
         //set the link attribute of the a tag
         a.attr('href',message.url);
         //append the link tag with the list item tag
