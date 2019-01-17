@@ -40,6 +40,8 @@ socket.on('connect', function () {
             text: jQuery('[name=message]').val()
             //add callback to retrieve server response
         }, function (serverResponse) {
+            //clear the chat input box by setting its value to an empty string
+            jQuery('[name=message]').val('');
             console.log('Getting reply from server..: ', serverResponse);
         });
     });
@@ -51,10 +53,16 @@ socket.on('connect', function () {
         if(!navigator.geolocation){
             return alert('Sorry your browser doesnt support this feature');
         }
+        //if geolocation is enabled disable the button after the user clicked it
+        //this is to ensure they do not click multiple times
+        //also change what the button says
+        locationButton.attr('disabled','disabled').text('sending location...');
         //if geolocation is working,get user position.
         //add one callback for success case and one for error case
         navigator.geolocation.getCurrentPosition(function(position){
             console.log(position);
+            //once location data is received, reenable the location button
+            locationButton.removeAttr('disabled').text('Beam your location');
             //emit a new message to the server with the coordinates
             socket.emit('createLocationMessage',{
                 latitude: position.coords.latitude,
@@ -64,6 +72,7 @@ socket.on('connect', function () {
                 console.log('Getting reply from server..: ', serverResponse);
             });
         },function(){
+                locationButton.removeAttr('disabled').text('Beam your location');
             //give error message if location not retrieved
             alert('Unable to fetch your location :(');
         });
