@@ -8,7 +8,7 @@ const http = require('http');
 //configure a public path
 const publicPath = path.join(__dirname,'../public');
 //bring in function for creating messages
-const {generateMessage} = require('./utils/message');
+const {generateMessage,generateLocationMessage} = require('./utils/message');
 //configuration for heroku
 const port = process.env.PORT || 3000;
 
@@ -48,7 +48,7 @@ io.on('connection',(socket)=>{//the socket argument stands for the single user c
     });
     //listen out for when a client beams their location
     socket.on('createLocationMessage',(coords,callback)=>{
-        io.emit('newMessage',generateMessage('Admin',`${coords.latitude}, ${coords.longitude}`));
+        io.emit('newLocationMessage',generateLocationMessage('Admin',coords.latitude,coords.longitude));
         //send acknowledgement for the client
         callback('User location..received');
     });

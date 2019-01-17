@@ -14,6 +14,21 @@ socket.on('connect', function () {
         //append the created tag to an existing frontend element
         jQuery('#messages').append(li);
     });
+    //listen for new location messages from server
+    socket.on('newLocationMessage', function(message){
+        //create list item element
+        var li = jQuery('<li class="list-group-item bg-dark text-white"></li>');
+        //create element for the user location link
+        var a = jQuery('<a target="_blank">New sent location</a>');
+        //inject message into the list item
+        li.text(`${message.from}: `);
+        //set the link attribute of the a tag
+        a.attr('href',message.url);
+        //append the link tag with the list item tag
+        li.append(a);
+        //append the full list item to the messages element
+        jQuery('#messages').append(li);
+    });
 
     //jquery for chat form manipulation
     jQuery('#message-form').on('submit',function(e){
