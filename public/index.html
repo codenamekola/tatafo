@@ -1,37 +1,28 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" 
-            href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" 
-            integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
-            crossorigin="anonymous">
-    <title>TataFo</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+        crossorigin="anonymous">
+    <title>TataFo | SignIn</title>
 </head>
+
 <body>
     <div class="container">
-    <div class="col-md-5 mt-4">
-        <h4><code><strong>TataFo</strong></code> |</h4>
-        <p><small>Realtime chat and games built with Node JS</small></p>
-        <hr/>
-
-        <ol style="max-height:209px;overflow:auto" id="messages" class="list-group"></ol>
-        
-        <form id="message-form" class="form-group">
-            <input name="message" type="text" placeholder="message.." class="form-control" autofocus autocomplete="off" />
-            <button class="btn btn-sm btn-success mt-1">Send</button>
+    <div class="col-md-4 mt-4">
+        <div class="jumbotron">
+        <h5><strong><code>TataFo</code></strong> | <small>Join a chat room</small></h5>
+        <form class="form-group" action="/chat.html">
+            <input type="text" name="username" class="form-control" autocomplete="off" placeholder="username" required autofocus>
+            <input type="text" name="room" class="form-control" autocomplete="off" placeholder="chat room" required>
+            <button class="btn btn-sm btn-primary mt-2" type="submit">Join</button>
         </form>
-        
-        <button id="send-location" class="btn btn-sm btn-warning">Beam your location</button>
+        </div>
     </div>
-   </div>
-   
-   <!--using socket io in our server gives us access to this file. Containing a range of required functions-->
-   <script src="/socket.io/socket.io.js"></script>
-   <script src="/js/libs/jquery-3.3.1.min.js"></script>
-   <script src="/js/libs/moment.js"></script>
-   <script src="/js/index.js"></script>
+    </div>
 </body>
+
 </html>
