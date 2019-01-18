@@ -1,6 +1,23 @@
 //var moment = require('moment');
 //create object of io method, which we have access to via the socket.io.js file
 var socket = io();//will handle opening up connections and keeping it open
+//function for autoscroll
+function scrollToBottom(){
+    //select chat containing element
+    var messages = jQuery('#messages');
+    //get newest chat in the list
+    var newMessage = messages.children('li:last-child');
+    //get height for calculations
+    var clientHeight = messages.prop('clientHeight');
+    var scrollTop = messages.prop('scrollTop');
+    var scrollHeight = messages.prop('scrollHeight');
+    var newMessageHeight = newMessage.innerHeight();
+    var lastMessageHeight = newMessage.prev().innerHeight();
+    //get conditions for scroll
+    if(clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight){
+        messages.scrollTop(scrollHeight);
+    }
+}
 //we can use the socket variable to listen for a connected event
 socket.on('connect', function () {
     console.log('Connected to server..');
@@ -20,6 +37,8 @@ socket.on('connect', function () {
         li.append(small);
         //append the list item to the front end element
         jQuery('#messages').append(li);
+        //call autoscroll
+        scrollToBottom();
     });
     //listen for new location messages from server
     socket.on('newLocationMessage', function(message){
@@ -27,7 +46,7 @@ socket.on('connect', function () {
         var li = jQuery('<li class="list-group-item bg-dark text-white"></li>');
         var small = jQuery('<small></small>');
         //create element for the user location link
-        var a = jQuery('<a target="_blank">New sent location</a>');
+        var a = jQuery('<a target="_blank">New shared location</a>');
         //inject message into the small tags
         var formattedTime = moment(message.createdAt).format('h:mm a');
         small.text(`${message.from} ${formattedTime}: `);
@@ -38,6 +57,8 @@ socket.on('connect', function () {
         li.append(small);
         //append the full list item to the messages element
         jQuery('#messages').append(li);
+        //call autoscroll
+        scrollToBottom();
     });
 
     //jquery for chat form manipulation

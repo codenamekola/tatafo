@@ -16,14 +16,15 @@
         <h4><code><strong>TataFo</strong></code> |</h4>
         <p><small>Realtime chat and games built with Node JS</small></p>
         <hr/>
-        <ol id="messages" class="list-group"></ol>
+
+        <ol style="max-height:209px;overflow:auto" id="messages" class="list-group"></ol>
         
         <form id="message-form" class="form-group">
             <input name="message" type="text" placeholder="message.." class="form-control" autofocus autocomplete="off" />
-            <button class="btn btn-success mt-1">Send</button>
+            <button class="btn btn-sm btn-success mt-1">Send</button>
         </form>
         
-        <button id="send-location" class="btn btn-warning">Beam your location</button>
+        <button id="send-location" class="btn btn-sm btn-warning">Beam your location</button>
     </div>
    </div>
    
