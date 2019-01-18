@@ -12,24 +12,30 @@ socket.on('connect', function () {
         //use jquery to render incoming messages
         //crated required html tag using jquery
         var li = jQuery('<li class="list-group-item bg-dark text-white"></li>');
-        //give data to the created html tag
-        li.text(`${message.from} ${formattedTime}: ${message.text}`);
-        //append the created tag to an existing frontend element
+        //create small tags
+        var small = jQuery('<small></small>');
+        //assign the message into the small tags
+        small.text(`${message.from} ${formattedTime}: ${message.text}`);
+        //append the small tags into the list item
+        li.append(small);
+        //append the list item to the front end element
         jQuery('#messages').append(li);
     });
     //listen for new location messages from server
     socket.on('newLocationMessage', function(message){
         //create list item element
         var li = jQuery('<li class="list-group-item bg-dark text-white"></li>');
+        var small = jQuery('<small></small>');
         //create element for the user location link
         var a = jQuery('<a target="_blank">New sent location</a>');
-        //inject message into the list item
+        //inject message into the small tags
         var formattedTime = moment(message.createdAt).format('h:mm a');
-        li.text(`${message.from} ${formattedTime}: `);
+        small.text(`${message.from} ${formattedTime}: `);
         //set the link attribute of the a tag
         a.attr('href',message.url);
-        //append the link tag with the list item tag
-        li.append(a);
+        //append the link tag with the small tags
+        small.append(a);
+        li.append(small);
         //append the full list item to the messages element
         jQuery('#messages').append(li);
     });

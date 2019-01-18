@@ -9,9 +9,9 @@ describe('generateMessage',()=>{
         //get a returned value for the test case
         var message = generateMessage(from,text);
         //assert that cratedat is a number
-        expect(message.createdAt).toBeA('number');
+        expect(typeof message.createdAt).toBe('number');
         //assert that from and text are included as properties in the returnd object
-        expect(message).toInclude({from,text});
+        expect(message).toMatchObject({from,text});
     });
 });
 
@@ -22,8 +22,8 @@ describe('generateLocationMessage',()=>{
         var latitude = 2;
         var message = generateLocationMessage(from,latitude,longitude);
         expect(message.url).toBe('https://www.google.com/maps?q=2,1');
-        expect(message.createdAt).toBeA('number');
-        expect(message).toInclude({from});
+        expect(typeof message.createdAt).toBe('number');
+        expect(message).toMatchObject({from});
     });
 });
 
