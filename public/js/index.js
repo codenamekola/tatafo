@@ -1,4 +1,4 @@
-var moment = require('moment');
+//var moment = require('moment');
 //create object of io method, which we have access to via the socket.io.js file
 var socket = io();//will handle opening up connections and keeping it open
 //we can use the socket variable to listen for a connected event
