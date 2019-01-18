@@ -11,6 +11,8 @@ const publicPath = path.join(__dirname,'../public');
 const {generateMessage,generateLocationMessage} = require('./utils/message');
 //configuration for heroku
 const port = process.env.PORT || 3000;
+//get function for validating user entry for joining chat
+const {isRealString} = require('./utils/validation');
 
 var app = express();
 //create a server using http and pass the express app into it
@@ -25,10 +27,27 @@ io.on('connection',(socket)=>{//the socket argument stands for the single user c
     //io.on will listen for connectino from all potential users
     //socket.on listens for an event from one particular socket
     console.log('New user connected..');
-    //send a welcome message event to new user
-    socket.emit('newMessage',generateMessage('Admin','Welcome to TataFo!'));
-    //inform other connected users of a new user just joining
-    socket.broadcast.emit('newMessage',generateMessage('Admin','New User joined..'));
+    //listen for the join event from the client
+    socket.on('join',(params,callback)=>{
+        //verify and validate user entry
+        if(!isRealString(params.username) || !isRealString(params.room)){
+            //if validation fails pass error message to callback
+            callback('Please provide valid username and room name');
+        }
+        //join the requested room
+        socket.join(params.room);
+        /*
+        to broadcast to everyone in room use io.to(roomname).emit()
+        to broadcast to everyone execpt user use socket.broadcast.to(roomname).emit()
+        to borasdcast to just one user remains socket.emit()
+        */
+        //send a welcome message event to new user
+        socket.emit('newMessage', generateMessage('Admin', 'Welcome to TataFo!'));
+        //inform other connected users of a new user just joining
+        socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin',`${params.username} joined the room`));
+        //if no errors still call callback but no need for any message
+        callback();
+    });
     //listen for messages from a client
     socket.on('createMessage',(message,callback)=>{
         //the callback argument represents a function that can be called 

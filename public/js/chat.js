@@ -21,6 +21,21 @@ function scrollToBottom(){
 //we can use the socket variable to listen for a connected event
 socket.on('connect', function () {
     console.log('Connected to server..');
+    //begin process to join a chat room
+    //get the entered name and chat room data submitted by user
+    var params = jQuery.deparam(window.location.search);
+    //emit an event to the server and pass the params
+    //use an acknowldegment function to get response from server or output errors
+    socket.emit('join',params,function(err){
+        if(err){
+            //if an error comes back in ack,send user back to root page and alert user on error
+            alert(err);
+            window.location.href = '/';
+        }else{
+            //if no errors
+            console.log('No errors..');
+        }
+    });
     //listen for new messages from server
     socket.on('newMessage', function (message) {
         console.log('message', message);
