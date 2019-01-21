@@ -15,22 +15,22 @@
     <h4 class="mt-3"><code><strong>TataFo</strong></code> |</h4>
     <p><small>Realtime chat built with Node JS and SocketIO</small></p>
     <div class="row">
-    <div class="col-md-4 mt-4">
-        <div class="card" style="width: 18rem;">
-            <div class="card-header bg-dark text-white">
-                <code>Room members</code>
-            </div>
-            <div class="card-body" id="chat-users"></div>
-        </div>
-
+    <div class="col-md-4">
         <ol style="max-height:209px;overflow:auto" id="messages" class="list-group"></ol>
         
         <form id="message-form" class="form-group">
             <input name="message" type="text" placeholder="message.." class="form-control" autofocus autocomplete="off" />
             <button class="btn btn-sm btn-success mt-1">Send</button>
         </form>
-        
         <button id="send-location" class="btn btn-sm btn-warning">Beam your location</button>
+    </div>
+    <div class="col-md-3">
+        <div class="card" style="width: 18rem;">
+            <div class="card-header bg-dark text-white">
+                <code>Room members</code>
+            </div>
+            <div class="card-body bg-dark" id="chat-users"></div>
+        </div>
     </div>
     </div>
    </div>

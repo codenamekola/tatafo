@@ -66,7 +66,12 @@ io.on('connection',(socket)=>{//the socket argument stands for the single user c
         //emit the message to other connected users
         //io.emit will broadcast to all connected users
         //socket.emit broadcasts to just one socket connection
-        io.emit('newMessage',generateMessage(message.from,message.text));
+        //get user instance 
+        var user = users.getUser(socket.id);
+        //if user is true then proceed
+        if(user && isRealString(message.text)){
+            io.to(user.room).emit('newMessage', generateMessage(user.username, message.text));
+        }
         callback('Received by server..');//callback is called an a string is passed as argument
         //emit a broadcast message to everyone else but the sender
         /*socket.broadcast.emit('newMessage',{
@@ -77,7 +82,10 @@ io.on('connection',(socket)=>{//the socket argument stands for the single user c
     });
     //listen out for when a client beams their location
     socket.on('createLocationMessage',(coords,callback)=>{
-        io.emit('newLocationMessage',generateLocationMessage('Admin',coords.latitude,coords.longitude));
+        var user = users.getUser(socket.id);
+        if(user){
+            io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.username, coords.latitude, coords.longitude));
+        }
         //send acknowledgement for the client
         callback('User location..received');
     });

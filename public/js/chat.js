@@ -92,7 +92,6 @@ socket.on('connect', function () {
         e.preventDefault();
         //retrive data entered in chat from
         socket.emit('createMessage',{
-            from:'User',
             text: jQuery('[name=message]').val()
             //add callback to retrieve server response
         }, function (serverResponse) {
