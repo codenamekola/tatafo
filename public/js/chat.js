@@ -55,6 +55,16 @@ socket.on('connect', function () {
         //call autoscroll
         scrollToBottom();
     });
+    //listen for new users joining the chat room
+    socket.on('updateUserList', function(users){
+        console.log('Users',users);
+        var ol = jQuery('<ol class="list-group"></ol>');
+        users.forEach(function(user){
+            ol.append(jQuery('<li class="list-group-item"></li>').text(user));
+        });
+
+        jQuery('#chat-users').html(ol);
+    });
     //listen for new location messages from server
     socket.on('newLocationMessage', function(message){
         //create list item element

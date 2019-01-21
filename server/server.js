@@ -13,12 +13,16 @@ const {generateMessage,generateLocationMessage} = require('./utils/message');
 const port = process.env.PORT || 3000;
 //get function for validating user entry for joining chat
 const {isRealString} = require('./utils/validation');
+//get class with user functions
+const {Users} = require('./utils/users');
 
 var app = express();
 //create a server using http and pass the express app into it
 var server = http.createServer(app);//main reason for using this technique is so socket.io can be integrated
 //create a web sockets variable
 var io = socketIO(server);//io would now serve as a socket server object
+//create a new users object to have access to user methods
+var users = new Users();
 //use the express static middleware to point to the public path
 app.use(express.static(publicPath));
 //use io to listen out for new socket connections
@@ -32,10 +36,16 @@ io.on('connection',(socket)=>{//the socket argument stands for the single user c
         //verify and validate user entry
         if(!isRealString(params.username) || !isRealString(params.room)){
             //if validation fails pass error message to callback
-            callback('Please provide valid username and room name');
+            return callback('Please provide valid username and room name');
         }
         //join the requested room
         socket.join(params.room);
+        //remove this user from any previous rooms
+        //users.removeUser(socket.id);//this gave issues in having current users list
+        //call users function to add user to room
+        users.addUser(socket.id,params.username,params.room);
+        //emit event to update user list by getting all current users in room
+        io.to(params.room).emit('updateUserList', users.getUserList(params.room));
         /*
         to broadcast to everyone in room use io.to(roomname).emit()
         to broadcast to everyone execpt user use socket.broadcast.to(roomname).emit()
@@ -74,6 +84,15 @@ io.on('connection',(socket)=>{//the socket argument stands for the single user c
     //listen out for when the client disconnects using the socket argument and on function
     socket.on('disconnect',()=>{
         console.log('User disconnected..');
+        //create a variable to represent a disconnected user
+        var user = users.removeUser(socket.id);
+        //if user is true,emit two events
+        if(user){
+            //emit first event to update the userlist
+            io.to(user.room).emit('updateUserList',users.getUserList(user.room));
+            //emit second event to inform other users of user leaving
+            io.to(user.room).emit('newMessage',generateMessage('Admin',`${user.username} has left the room..`));
+        }
     });
 });
 
