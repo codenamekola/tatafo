@@ -52,7 +52,7 @@ io.on('connection',(socket)=>{//the socket argument stands for the single user c
         to borasdcast to just one user remains socket.emit()
         */
         //send a welcome message event to new user
-        socket.emit('newMessage', generateMessage('Admin', 'Welcome to TataFo!'));
+        socket.emit('newMessage', generateMessage('Admin', 'Connected..'));
         //inform other connected users of a new user just joining
         socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin',`${params.username} joined the room`));
         //if no errors still call callback but no need for any message
