@@ -52,9 +52,9 @@ io.on('connection',(socket)=>{//the socket argument stands for the single user c
         to borasdcast to just one user remains socket.emit()
         */
         //send a welcome message event to new user
-        socket.emit('newMessage', generateMessage('Admin', 'Connected..'));
+        socket.emit('newMessage', generateMessage('Tata$Bot', 'Connected..'));
         //inform other connected users of a new user just joining
-        socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin',`${params.username} joined the room`));
+        socket.broadcast.to(params.room).emit('newMessage', generateMessage('Tata$Bot',`${params.username} joined the room`));
         //if no errors still call callback but no need for any message
         callback();
     });
@@ -99,7 +99,7 @@ io.on('connection',(socket)=>{//the socket argument stands for the single user c
             //emit first event to update the userlist
             io.to(user.room).emit('updateUserList',users.getUserList(user.room));
             //emit second event to inform other users of user leaving
-            io.to(user.room).emit('newMessage',generateMessage('Admin',`${user.username} has left the room..`));
+            io.to(user.room).emit('newMessage',generateMessage('Tata$Bot',`${user.username} has left the room..`));
         }
     });
 });
